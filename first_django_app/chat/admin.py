@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Message
+from .models import Chat, Message
 
 class MessageAdmin(admin.ModelAdmin):
     #Zeige die info beim anklicken an
-    fields = ('text','create_at', 'author', 'receiver')
+    fields = ('chat','text','create_at', 'author', 'receiver')
     #Zeige die Info als Tabelle beim laden an 
     list_display = ('text','create_at', 'author', 'receiver')
     #CustomFilter
@@ -11,3 +11,4 @@ class MessageAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Message, MessageAdmin)
+admin.site.register(Chat)
