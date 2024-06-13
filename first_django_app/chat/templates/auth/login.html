@@ -25,6 +25,9 @@
   {% if wrongData %}
     <p><i>Name or password is wrong.</i></p>
   {% endif %}
+
+  <input type="hidden" name="redirect" value="{{ redirect }}">
+  
   <div class="mdl-textfield mdl-js-textfield">
     <input
       class="mdl-textfield__input"

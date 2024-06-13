@@ -3,7 +3,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Message, Chat
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
+
+
+@login_required(login_url='/login/') # man leitet automatisch zu /login/ weiter, wenn man nicht eingeloggt ist
 
 # Create your views here.
 def index(request):
@@ -20,12 +24,13 @@ def index(request):
 
 
 def login_view(request):
+    redirect = request.GET.get('next', '/chat/') #weiterleitung
     if request.method == 'POST':
         user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
         print('user ' , user) # check user angaben
         if user:
             login(request, user) # überprüfe user in der datenbank
-            return HttpResponseRedirect('/chat/') # weiterleitung
+            return HttpResponseRedirect(request.POST.get('redirect', '/chat/')) # weiterleitung
         else:
-            return render(request, 'auth/login.html', {'wrongData': True}) # return fehler, wenn was nicht passt
-    return render(request, 'auth/login.html')
+            return render(request, 'auth/login.html', {'wrongData': True, 'redirect': redirect}) # return fehler, wenn was nicht passt
+    return render(request, 'auth/login.html', {'redirect': redirect})
