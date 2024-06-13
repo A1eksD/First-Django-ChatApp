@@ -24,7 +24,7 @@ def index(request):
 
 
 def login_view(request):
-    redirect = request.GET.get('next', '/chat/') #weiterleitung
+    redirect = request.GET.get('next', '/chat/') #weiterleitung (next im link nicht vorhaned, deshalb chat als ausweichmöglichkeit)
     if request.method == 'POST':
         user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
         print('user ' , user) # check user angaben
