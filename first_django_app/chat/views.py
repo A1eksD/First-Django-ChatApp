@@ -4,6 +4,9 @@ from django.shortcuts import render
 from .models import Message, Chat
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+
 
 
 
@@ -34,3 +37,29 @@ def login_view(request):
         else:
             return render(request, 'auth/login.html', {'wrongData': True, 'redirect': redirect}) # return fehler, wenn was nicht passt
     return render(request, 'auth/login.html', {'redirect': redirect})
+
+
+def register_view(request):
+    redirect = request.GET.get('next', '/chat/')
+    if request.method == 'POST':
+        username = request.POST.get('registerName')
+        email = request.POST.get('registerEmail')
+        password1 = request.POST.get('registerPassword1')
+        password2 = request.POST.get('registerPassword2')
+
+        # Check if passwords match
+        if password1 != password2:
+            return render(request, 'auth/register.html', {'error': 'Passwords do not match.', 'redirect': redirect})
+
+        try:
+            user = User.objects.create_user(username, email, password1)
+            login(request, user)  # Log in the newly registered user
+            return HttpResponseRedirect(redirect)  # Redirect to desired page
+        except Exception as e:
+            # Handle other registration errors
+            print(f"Registration error: {e}")
+            return render(request, 'auth/register.html', {'error': str(e)})  # Show error message
+
+    return render(request, 'auth/register.html', {'redirect': redirect})
+
+

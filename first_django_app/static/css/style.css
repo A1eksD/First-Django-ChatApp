@@ -25,3 +25,7 @@ form {
   justify-content: center;
   flex-direction: column;
 }
+
+.buttonDiv{
+  margin: 8px;
+}

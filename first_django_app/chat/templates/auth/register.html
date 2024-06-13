@@ -1,0 +1,31 @@
+{% extends "baseStyle.html" %}
+{% block content %}
+<!-- Simple Textfield -->
+<form action="/register/" method="post">
+    {% csrf_token %}
+    <div class="mdl-textfield mdl-js-textfield">
+      <input class="mdl-textfield__input" name="registerName" type="text" id="sample1">
+      <label class="mdl-textfield__label" for="sample1">Text...</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <input class="mdl-textfield__input" name="registerEmail" type="email" id="sample1">
+      <label class="mdl-textfield__label" for="sample1">Email...</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <input class="mdl-textfield__input" name="registerPassword1" type="password" id="sample1">
+      <label class="mdl-textfield__label" for="sample1">Passwort...</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <input class="mdl-textfield__input" name="registerPassword2" type="password" id="sample1">
+      <label class="mdl-textfield__label" for="sample1">Repeat password...</label>
+    </div>
+
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+        Save
+    </button>
+  
+</form>
+{% endblock %}

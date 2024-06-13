@@ -19,3 +19,10 @@ class Message(models.Model):
     #   info für die datenbank zum einkategoresieren)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='auther_message_set')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='receiverer_message_set')
+
+
+class newUser(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=80)
+    password1 = models.CharField(max_length=100)
+    password2 = models.CharField(max_length=100)
