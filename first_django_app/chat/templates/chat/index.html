@@ -26,17 +26,21 @@
             <span class="colorGray">[${date}]</span> ${ userFirstName }: <i class="colorGray">${ messageField.value }</i>
           </div>`;
 
-          await fetch('/chat/', { /* sende anfrage and er server und speicher die nachricht */
+          let response = await fetch('/chat/', { /* sende anfrage and er server und speicher die nachricht */
             method: 'POST',
             body: fd
           });
+          let json = await response.json();
+          console.table(json);
           console.log('fetch succsessful');
           document.getElementById('deleteMessage').remove();
-
+          const dateObject = new Date(Date.parse(json.fields.create_at));
+          const formattedDate = dateObject.toLocaleString('en-US', {month: 'long', year: 'numeric', day: 'numeric' });
+          
           /* zeige die anchricht an, die im server gespeichert wurde*/
           messageContainer.innerHTML +=  `
           <div>
-            <span class="colorGray">[${date}]</span> ${ userFirstName } <i>${ messageField.value }</i>
+            <span class="colorGray">[${formattedDate}]</span> ${ json.fields.author }: <i>${ json.fields.text }</i>
           </div>`;
 
           messageField.value = '';

@@ -1,10 +1,11 @@
 from mailbox import Message
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import Message, Chat
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core import serializers
 
 
 
@@ -19,8 +20,9 @@ def index(request):
         # vergebe immer den chat mit id=1 an die message
         myChats = Chat.objects.get(id=1)
         # erstelle gleichzitig ein neues textObject
-        Message.objects.create(text=request.POST['textMessage'], chat=myChats, author=request.user, receiver=request.user  )
-    
+        new_message = Message.objects.create(text=request.POST['textMessage'], chat=myChats, author=request.user, receiver=request.user  )
+        serialized_obj = serializers.serialize('json', [ new_message, ]) # wandel die message in ein array um
+        return JsonResponse(serialized_obj[1:-1], safe=False) # gib das json als wtring wieder / [1:-1] envernt die [] und returnt einen reinen json und kein string
     chatMessages = Message.objects.filter(chat__id=1) #chat__id=1  ==  syntax um auf chat mit der id 1 zuzugreifen
 
     return render(request, 'chat/index.html', {'messages': chatMessages})
