@@ -1,18 +1,56 @@
 {% extends "baseStyle.html" %}
 {% block content %}
   {% if request.user.is_authenticated %}
+    
+    <div id="messageContainer">
+      {% for message in messages %}
+        <div>
+          <span class="colorGray">[{{ message.create_at }}]</span> {{ message.author.first_name }}: <i>{{ message.text }}</i>
+        </div>
+      {% endfor %}
+    </div>
 
-    {% for message in messages %}
-      <div>
-       <span class="colorGray">[{{ message.create_at }}]</span> {{ message.author.first_name }}: <i>{{ message.text }}</i>
-      </div>
-    {% endfor %}
+    <script>
+      async function sendMessage(){
+        let fd = new FormData();
+        let token = '{{ csrf_token }}'
+        let userFirstName = '{{ request.user.first_name }}';
+        fd.append( 'textMessage' , messageField.value); /* deklariere den value der eingetippt wird (id des inputs, value)*/
+        fd.append( 'csrfmiddlewaretoken' , token); /* deklariere toke für die message (django - erforderlich)*/
+        let date = new Date().toLocaleString('en-us',{month:'long', year:'numeric', day:'numeric'}); 
 
-    <form action="/chat/" method="post">
+        try {
+          /* erstelle eien graue nachricht als vorschau*/
+          messageContainer.innerHTML +=  ` 
+          <div id="deleteMessage">
+            <span class="colorGray">[${date}]</span> ${ userFirstName }: <i class="colorGray">${ messageField.value }</i>
+          </div>`;
+
+          await fetch('/chat/', { /* sende anfrage and er server und speicher die nachricht */
+            method: 'POST',
+            body: fd
+          });
+          console.log('fetch succsessful');
+          document.getElementById('deleteMessage').remove();
+
+          /* zeige die anchricht an, die im server gespeichert wurde*/
+          messageContainer.innerHTML +=  `
+          <div>
+            <span class="colorGray">[${date}]</span> ${ userFirstName } <i>${ messageField.value }</i>
+          </div>`;
+
+          messageField.value = '';
+        } catch(e){
+          console.log('Erro:', e)
+        }
+      }
+    </script>
+
+    <form onsubmit="sendMessage(); return false;" method="post">
       {% csrf_token %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" name="textMessage" type="text" id="sample3">
-        <label class="mdl-textfield__label" for="sample3">Text...</label>
+        <input class="mdl-textfield__input" name="textMessage" type="text" id="messageField">
+        <label class="mdl-textfield__label" for="messageField">Text...</label>
       </div>
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
           Send

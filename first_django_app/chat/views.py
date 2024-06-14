@@ -42,23 +42,24 @@ def login_view(request):
 def register_view(request):
     redirect = request.GET.get('next', '/chat/')
     if request.method == 'POST':
+        # lese die daten aus
         username = request.POST.get('registerName')
         email = request.POST.get('registerEmail')
         password1 = request.POST.get('registerPassword1')
         password2 = request.POST.get('registerPassword2')
 
-        # Check if passwords match
-        if password1 != password2:
+        # überprüfe ob pw's gleich sind
+        if password1 != password2: 
             return render(request, 'auth/register.html', {'error': 'Passwords do not match.', 'redirect': redirect})
 
         try:
-            user = User.objects.create_user(username, email, password1)
-            login(request, user)  # Log in the newly registered user
-            return HttpResponseRedirect(redirect)  # Redirect to desired page
+            user = User.objects.create_user(username, email, password1) #lege den user mit create_user an
+            login(request, user) # überprüfe user in der datenbank
+            return HttpResponseRedirect(redirect) # weiterleitung
         except Exception as e:
             # Handle other registration errors
             print(f"Registration error: {e}")
-            return render(request, 'auth/register.html', {'error': str(e)})  # Show error message
+            return render(request, 'auth/register.html', {'error': str(e)})  # zeige error
 
     return render(request, 'auth/register.html', {'redirect': redirect})
 
