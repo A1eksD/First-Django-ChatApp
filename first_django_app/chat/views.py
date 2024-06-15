@@ -22,7 +22,7 @@ def index(request):
         # erstelle gleichzitig ein neues textObject
         new_message = Message.objects.create(text=request.POST['textMessage'], chat=myChats, author=request.user, receiver=request.user  )
         serialized_obj = serializers.serialize('json', [ new_message, ]) # wandel die message in ein array um
-        return JsonResponse(serialized_obj[1:-1], safe=False) # gib das json als wtring wieder / [1:-1] envernt die [] und returnt einen reinen json und kein string
+        return JsonResponse(serialized_obj[1:-1], safe=False) # gib das json als wtring wieder / [1:-1] entfernt die [] und returnt einen reinen json und kein string
     chatMessages = Message.objects.filter(chat__id=1) #chat__id=1  ==  syntax um auf chat mit der id 1 zuzugreifen
 
     return render(request, 'chat/index.html', {'messages': chatMessages})
