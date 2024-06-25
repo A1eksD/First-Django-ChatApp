@@ -5,9 +5,8 @@
   {% csrf_token %}
   <h1>Login</h1>
   {% if wrongData %}
-    <p><i>Name or password is wrong.</i></p>
+    <p  class="error"><i>Name or password is wrong.</i></p>
   {% endif %}
-
   <input type="hidden" name="redirect" value="{{ redirect }}">
 
   <div class="mdl-textfield mdl-js-textfield">

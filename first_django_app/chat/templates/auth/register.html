@@ -1,5 +1,9 @@
 {% extends "baseStyle.html" %}
 {% block content %}
+{% if userAlreadyExists %}
+    <p class="error">Benutzer existiert bereits!</p>
+{% endif %}
+
 <!-- Simple Textfield -->
 <form action="/register/" method="post">
     {% csrf_token %}
